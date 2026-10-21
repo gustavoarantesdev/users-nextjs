@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "./../db";
-import { users } from "../db/schema";
+import { User, users } from "../db/schema";
 
 export async function getUsers() {
   try {
@@ -11,5 +11,16 @@ export async function getUsers() {
   } catch (error) {
     console.error(error);
     return { error: "Failed to get users" };
+  }
+}
+
+export async function createUser(user: Omit<User, "id">) {
+  try {
+    const newUser = await db.insert(users).values(user);
+
+    return newUser;
+  } catch (error) {
+    console.error(error);
+    return { error: "Failed to create new user" };
   }
 }
