@@ -7,7 +7,6 @@ import { eq } from "drizzle-orm";
 export async function getUsers() {
   try {
     const allUsers = await db.select().from(users);
-
     return allUsers;
   } catch (error) {
     console.error(error);
@@ -18,7 +17,6 @@ export async function getUsers() {
 export async function createUser(user: Omit<User, "id">) {
   try {
     const newUser = await db.insert(users).values(user);
-
     return newUser;
   } catch (error) {
     console.error(error);
@@ -26,13 +24,25 @@ export async function createUser(user: Omit<User, "id">) {
   }
 }
 
-export async function updateUser(id: string, user: User) {
-    try {
-        const updatedUser = await db.update(users).set(user).where(eq(users.id, id));
+export async function updateUser(id: number, user: User) {
+  try {
+    const updatedUser = await db
+      .update(users)
+      .set(user)
+      .where(eq(users.id, id));
+    return updatedUser;
+  } catch (error) {
+    console.error(error);
+    return { error: "Failed to update user" };
+  }
+}
 
-        return updatedUser;
-    } catch (error) {
-     console.error(error);
-    return { error: "Failed to update user" };       
-    }
+export async function deleteUser(id: number) {
+  try {
+    const deletedUser = db.delete(users).where(eq(users.id, id));
+    return deletedUser;
+  } catch (error) {
+    console.error(error);
+    return { error: "Failed to delete user" };
+  }
 }
