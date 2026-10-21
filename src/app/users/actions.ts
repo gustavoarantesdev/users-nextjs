@@ -1,7 +1,7 @@
 "use server";
 
-import { db } from "./../db";
-import { User, users } from "../db/schema";
+import { db } from "../../db";
+import { User, users } from "../../db/schema";
 import { eq } from "drizzle-orm";
 
 export async function getUsers() {
@@ -10,7 +10,7 @@ export async function getUsers() {
     return allUsers;
   } catch (error) {
     console.error(error);
-    return { error: "Failed to get users" };
+    throw new Error();
   }
 }
 
