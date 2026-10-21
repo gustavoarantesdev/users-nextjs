@@ -2,6 +2,7 @@
 
 import { db } from "./../db";
 import { User, users } from "../db/schema";
+import { eq } from "drizzle-orm";
 
 export async function getUsers() {
   try {
@@ -23,4 +24,15 @@ export async function createUser(user: Omit<User, "id">) {
     console.error(error);
     return { error: "Failed to create new user" };
   }
+}
+
+export async function updateUser(id: string, user: User) {
+    try {
+        const updatedUser = await db.update(users).set(user).where(eq(users.id, id));
+
+        return updatedUser;
+    } catch (error) {
+     console.error(error);
+    return { error: "Failed to update user" };       
+    }
 }
